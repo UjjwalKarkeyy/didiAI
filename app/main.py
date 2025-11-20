@@ -11,3 +11,4 @@ app.include_router(ingest_router, prefix="/ingest")
 def health():
     return {"status": "ok"}
 
+    
