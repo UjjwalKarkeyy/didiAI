@@ -1,1 +1,4 @@
 Workflow.docx
+.venv
+/app/config.py
+__pycache__
