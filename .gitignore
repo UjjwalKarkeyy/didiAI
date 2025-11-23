@@ -2,4 +2,5 @@ Workflow.docx
 .venv
 __pycache__
 app/config.py
+*.docx
 ~$rkflow.docx
