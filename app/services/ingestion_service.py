@@ -7,6 +7,7 @@ from langchain_core.documents import Document
 from app.rag.chunking import chunk_entry
 from app.rag.embeddings import embedding_function
 from app.rag.vector_store import upsert_points
+from app.db.models import Documents
 
 # create vector points
 def create_vector_points(chunks: List[Document], embeddings: List[List[float]], document_id: int,) -> Tuple[List[PointStruct], List[str]]:
@@ -37,7 +38,10 @@ def create_vector_points(chunks: List[Document], embeddings: List[List[float]], 
     return points, vector_ids
 
 # ingest document
-def ingest_document_text(text: str, document_id: int, strategy: str = "recursive") -> Tuple[List[str], List[Document]]:
+def ingest_document_text(text: str, file_name: str, strategy: str = "recursive") -> Tuple[List[str], List[Document]]:
+    # store doc in db
+    document = Documents(filename = file_name, chunk_strategy = strategy)
+    
     # chunk document
     chunks: List[Document] = chunk_entry(text, strategy=strategy)
 
@@ -47,11 +51,12 @@ def ingest_document_text(text: str, document_id: int, strategy: str = "recursive
     chunk_texts: List[str] = [c.page_content for c in chunks]
     # create embeddings
     embeddings: List[List[float]] = embedding_function.embed_documents(chunk_texts)
+
     # create points
     points, vector_ids = create_vector_points(
         chunks = chunks,
         embeddings= embeddings,
-        document_id=document_id,
+        document_id=document.id,
     )
     # insert points in Qdrant collection
     upsert_points(points)

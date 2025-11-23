@@ -17,8 +17,6 @@ class ChatResponse(BaseModel):
 # pydantic schema for documentingestresponse
 # to program
 class DocumentIngestResponse(BaseModel):
-    document_id: int
-    chunks: int
     status: str  # "success"
 
 # pydantic schema for bookinginfo

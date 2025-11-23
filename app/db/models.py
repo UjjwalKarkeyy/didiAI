@@ -1,7 +1,8 @@
 # DEFINES WHAT TABLES (MODELS) TO USE
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker
 from app.db.session import Base
-import datetime
+from datetime import datetime, timezone
 
 # document table in sqlite
 class Documents(Base):
@@ -9,9 +10,8 @@ class Documents(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String(200), nullable=False)
-    content_type = Column(String(50), nullable=False)
     chunk_strategy = Column(String(50), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now(timezone.utc).isoformat())
 
 # metadata table in sqlite
 class ChunkMetadata(Base):
