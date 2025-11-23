@@ -5,15 +5,14 @@ from datetime import datetime, date, time
 # pydantic schema for chatrequest
 # from API
 class ChatRequest(BaseModel):
-    session_id : str
+    session_id : str | None = None
     message : str
 
 # pydantic schema for chatresponse
 # to user (response)
 class ChatResponse(BaseModel):
-    answer: str
-    booking_created: bool = False
-    booking: "BookingRead | None" = None
+    session_id: str
+    message: str
 
 # pydantic schema for documentingestresponse
 # to program

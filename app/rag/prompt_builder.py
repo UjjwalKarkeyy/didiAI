@@ -28,6 +28,10 @@ PROMPT_TEMPLATE = """
     {context}
 
     ---------------------------------------
+    CHAT HISTORY:
+    {history}
+
+    ---------------------------------------
     USER MESSAGE:
     {query}
 
