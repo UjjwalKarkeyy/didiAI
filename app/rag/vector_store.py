@@ -23,7 +23,7 @@ def collection_exists():
 def create_collection_if_not_exist():
     if not collection_exists():
         client.create_collection(
-            name = settings.QDRANT_COLLECTION,
+            collection_name = settings.QDRANT_COLLECTION,
             vectors_config = VectorParams(size = 384, distance = Distance.COSINE)
         )
 

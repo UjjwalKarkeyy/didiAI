@@ -17,7 +17,7 @@ def create_vector_points(chunks: List[Document], embeddings: List[List[float]], 
     for chunk_index, (chunk, emb_vec) in enumerate(zip(chunks, embeddings)):
         vector_id = str(uuid.uuid4())
         vector_ids.append(vector_id)
-        # what Qdrant returns
+        # non-vector info attached to vector (also called payload)
         payload = {
             "document_id": document_id,
             "chunk_index": chunk_index,
