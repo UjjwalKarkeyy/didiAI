@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.api.chat import router as chat_router
 from app.api.ingestion import router as ingest_router
 from app.rag.vector_store import create_collection_if_not_exist
+from app.db.session import init_db
 
 app = FastAPI()
 
@@ -15,6 +16,9 @@ def health():
 # start Qdrant collection check during wep app startup
 @app.on_event("startup")
 async def startup_event():
+    # create sqlite DB
+    init_db()
+    # create Qdrant DB
     create_collection_if_not_exist()
 
     

@@ -11,7 +11,7 @@ class Documents(Base):
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String(200), nullable=False)
     chunk_strategy = Column(String(50), nullable=False)
-    created_at = Column(DateTime, default=datetime.now(timezone.utc).isoformat())
+    created_at = Column(DateTime(timezone = True), default=datetime.now(timezone.utc))
 
 # metadata table in sqlite
 class ChunkMetadata(Base):

@@ -5,7 +5,11 @@ from app.rag.vector_store import client
 
 # custom rag retriever class
 class RagRetriever():
-    def __init__(self, collection = settings.QDRANT_COLLECTION, embedding_func = embedding_function, top_k: int = 3):
+    def __init__(self, 
+                 collection = settings.QDRANT_COLLECTION, 
+                 embedding_func = embedding_function, 
+                 top_k: int = 3
+    ):
         self.collection = collection
         self.embedding_func = embedding_func
         self.top_k = top_k # number of top results
@@ -19,12 +23,20 @@ class RagRetriever():
     def search(self, query: str, score_threshold: float = 0.0):
         query_embed = self.query_to_vec(query)
         try:
-            results = client.search(
+            results = client.query_points(
                 collection_name = self.collection, 
-                query_vector = query_embed, 
-                limit = self.top_k
-            )
+                query = query_embed, 
+                limit = self.top_k,
+                with_payload = True,
+            ).points
 
+            # DELETE THIS
+            points = client.scroll(
+            collection_name=settings.QDRANT_COLLECTION,
+            limit=10)
+            print(points)
+            # TILL HERE
+            
             # process results
             retrieved_docs = []
 
@@ -45,7 +57,7 @@ class RagRetriever():
                     "rank": i+1
                 })
 
-                return retrieved_docs
+            return retrieved_docs
             
         except Exception as e:
             print("Error in retriever: ", e)
