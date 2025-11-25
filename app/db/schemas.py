@@ -1,6 +1,7 @@
 # DEFINES PYDANTIC SCHEMAS FOR DATA VALIDATION
 from pydantic import BaseModel
 from datetime import datetime, date, time
+from typing import Any
 
 # pydantic schema for chatrequest
 # from API
@@ -19,17 +20,15 @@ class ChatResponse(BaseModel):
 class DocumentIngestResponse(BaseModel):
     status: str  # "success"
 
-# pydantic schema for bookinginfo
-# to user (response)
-class BookingInfo(BaseModel):
+# pydantic schema for booking request
+class BookingRequest(BaseModel):
     name : str
     email : str
     date : date
     time : time
 
-# pydantic schema for bookingcreate
-# to program
-class BookingCreate(BaseModel):
+# pydantic schema for booking response
+class BookingResponse(BaseModel):
     name: str
     email: str
     date_time: datetime
@@ -44,3 +43,6 @@ class BookingRead(BaseModel):
     date_time: datetime
     created_at: datetime
     session_id: str
+
+class AnyResponse(BaseModel):
+    message: Any

@@ -1,5 +1,5 @@
 # DEFINES DB ENGINE AND BASE MODEL USING SQLALCHEMY
-# using sqlalchemy to use 'pythonic' syntax for database (sqlite) interaction
+# using sqlalchemy to use 'pythonic' syntax for database (sqlite) interaction 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 # to help 'Base' create the tables
