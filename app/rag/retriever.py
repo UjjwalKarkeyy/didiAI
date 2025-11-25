@@ -29,13 +29,6 @@ class RagRetriever():
                 limit = self.top_k,
                 with_payload = True,
             ).points
-
-            # DELETE THIS
-            points = client.scroll(
-            collection_name=settings.QDRANT_COLLECTION,
-            limit=10)
-            print(points)
-            # TILL HERE
             
             # process results
             retrieved_docs = []

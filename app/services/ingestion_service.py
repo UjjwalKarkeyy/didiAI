@@ -12,7 +12,10 @@ from app.db.db_session import get_db
 from sqlalchemy.orm import Session
 
 # create vector points
-def create_vector_points(chunks: List[Document], embeddings: List[List[float]], document_id: int,) -> Tuple[List[PointStruct], List[str]]:
+def create_vector_points(chunks: List[Document], 
+                         embeddings: List[List[float]], 
+                         document_id: int,
+                         file_name: str) -> Tuple[List[PointStruct], List[str]]:
 
     points: List[PointStruct] = []
     vector_ids: List[str] = []
@@ -22,12 +25,14 @@ def create_vector_points(chunks: List[Document], embeddings: List[List[float]], 
         vector_ids.append(vector_id)
         # non-vector info attached to vector (also called payload)
         payload = {
+            "file_name": file_name,
             "document_id": document_id,
             "chunk_index": chunk_index,
             "text": chunk.page_content,
             "start_index": chunk.metadata.get("start_index"),
             "source": chunk.metadata.get("source"),
         }
+
         # a single point structure
         point = PointStruct(
             id = vector_id,
@@ -60,6 +65,7 @@ def ingest_document_text(text: str, file_name: str, db: Session, strategy: str =
         return [], []
     
     chunk_texts: List[str] = [c.page_content for c in chunks]
+
     # create embeddings
     embeddings: List[List[float]] = embedding_function.embed_documents(chunk_texts)
 
@@ -68,12 +74,8 @@ def ingest_document_text(text: str, file_name: str, db: Session, strategy: str =
         chunks = chunks,
         embeddings= embeddings,
         document_id=document_id,
+        file_name=file_name,
     )
-
-    # DELETE THIS
-    print("Chunks:", len(chunks))
-    print("Embeddings:", len(embeddings))
-    # TILL HERE
 
     # insert points in Qdrant collection
     upsert_points(points)

@@ -17,6 +17,7 @@ def recursive_chunk(text: str):
     )
 
     chunks = text_splitter.split_documents([parent_doc])
+
     return chunks
 
 # func for fixed chunk

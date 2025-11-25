@@ -14,7 +14,7 @@ client = QdrantClient(
 # func to check if collection exists
 def collection_exists():
     try:
-        client.get_collection(settings.QDRANT_COLLECTION)
+        client.get_collection(collection_name = settings.QDRANT_COLLECTION)
         return True
     except:
         return False
@@ -33,3 +33,16 @@ def upsert_points(points: List[PointStruct]):
         collection_name = settings.QDRANT_COLLECTION,
         points = points
     )
+
+# func to delete Qdrant data during startup
+def reset_qdrant_collection():
+    try:
+        if collection_exists():
+            client.delete_collection(collection_name=settings.QDRANT_COLLECTION)
+
+            # DELETE THIS
+            print("Qdrant collection deleted successfully\n")
+            # TILL HERE
+
+    except Exception as e:
+        print(f"Exception: {e}")
