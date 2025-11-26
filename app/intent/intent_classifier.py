@@ -21,7 +21,6 @@ Do NOT output anything else.
 User message: "{message}"
 """
 
-
 def classify_intent(message: str) -> str:
     prompt = INTENT_PROMPT.format(message=message)
     raw = classifier_llm.invoke(prompt).content.strip()

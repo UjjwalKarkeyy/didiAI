@@ -12,3 +12,4 @@ def save_slots(session_id: str, slots: dict):
 
 def clear_slots(session_id: str):
     r.delete(f"chat:session:{session_id}:slots")
+

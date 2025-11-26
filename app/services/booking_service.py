@@ -1,10 +1,9 @@
 from app.services.booking_extractors import extract_date, extract_email, extract_name
-from app.rag.llm_client import llm
+from app.rag.llm_client import classifier_llm as llm
 from app.db.models import Bookings
 from datetime import datetime, timezone, time
 from sqlalchemy.orm import Session
 from app.db.schemas import AnyResponse
-
 
 def ask_slot(slot_name: str, current_slots: dict) -> AnyResponse:
     """
@@ -32,7 +31,6 @@ def ask_slot(slot_name: str, current_slots: dict) -> AnyResponse:
         Now, ask the user for: {slot_name}.
         """)
 
-
 def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyResponse]:
     # 1. Try to fill slots from this message
     if not slots.get("name"):
@@ -50,7 +48,7 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
         if date:
             slots["date"] = date
 
-    # 2. Ask for missing slots in order
+    # Ask for missing slots in order
     if not slots.get("name"):
         resp = ask_slot("name", slots)
         return slots, resp
@@ -65,7 +63,6 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
 
     # 3. All filled → state_flow will finalize
     return slots, None
-
 
 def create_booking_from_slots(db: Session, session_id: str, slots: dict):
     """

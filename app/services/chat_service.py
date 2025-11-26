@@ -48,6 +48,7 @@ def rag_response(query: str, history):
 
     return llm.invoke(prompt)
 
+
 def state_flow(intent, session_id, query, history):
     state = get_state(session_id)
     slots = get_slots(session_id)
@@ -61,25 +62,11 @@ def state_flow(intent, session_id, query, history):
             return SimpleResponse(
                 "Sure! Let's book your interview. What is your full name?"
             )
-        else:
-            return rag_response(query, history)
-
 
     # 2. Booking flow is active → slot filling
     if state == "booking_active":
-
-        # DELETE THIS
-        print("---- BOOKING ACTIVE ----")
-        print("SLOTS BEFORE:", slots)
-        # TILL THIS
-
         updated_slots, response = handle_booking_turn(query, slots)
         save_slots(session_id, updated_slots)
-
-        # DELETE THIS
-        print("UPDATED SLOTS:", updated_slots)
-        print("RESPONSE FROM SLOT_MANAGER:", response)
-        # TILL THIS
 
         # If all slots filled, confirm and finish
         if all(updated_slots.values()):
