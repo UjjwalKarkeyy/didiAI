@@ -63,6 +63,8 @@ app/
 ├── __init__.py
 └── main.py
 assets/
+requirements.txt/
+README.md/
 ```
 ---
 
