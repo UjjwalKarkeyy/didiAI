@@ -58,9 +58,6 @@ app/
 ### **Ingest Response**
 <img src="assets/ingest_response.png" width="600">
 
-### **SQLite Table (Stored Documents)**
-<img src="assets/sqlite_table.png" width="600">
-
 ---
 
 # 💬 **2. Chat (RAG) Flow**
@@ -125,6 +122,9 @@ Below is the full slot-filling sequence:
 
 ## ✅ Final Booking Confirmation
 <img src="assets/interview_booked_response.png" width="600">
+
+### ✅**SQLite Table (Stored Documents)**
+<img src="assets/sqlite_table.png" width="600">
 
 ---
 
