@@ -9,7 +9,7 @@ from app.db import models
 DB_URL = 'sqlite:///didiAIDB.db'
 # sqlite is single thread, fastapi is async, 
 # to avoid thread lock error use check_same_thread: False
-engine = create_engine(DB_URL, connect_args={"check_same_thread": False}, echo = True) # echo to see sql logs
+engine = create_engine(DB_URL, connect_args={"check_same_thread": False}, echo = False) # echo to see sql logs
 
 SessionLocal = sessionmaker(
     autocommit = False, # to help rollback when error
@@ -22,4 +22,7 @@ Base = declarative_base()
 
 # func to initialize the db
 def init_db():
+    # drop all tables
+    Base.metadata.drop_all(bind=engine)
+    # create fresh for new session
     Base.metadata.create_all(bind = engine)

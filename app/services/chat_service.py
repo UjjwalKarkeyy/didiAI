@@ -1,3 +1,4 @@
+# DEFINES OVERALL FUNCTIONING OF CHAT SERVICE
 from app.rag.retriever import RagRetriever
 from app.rag.prompt_builder import PROMPT_TEMPLATE
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,15 +11,19 @@ from app.state.slot_manager import save_slots, get_slots, clear_slots
 from app.services.booking_service import handle_booking_turn, create_booking_from_slots
 from app.db.db_session import get_db
 
+# instance of personal RAG Retriever
 retriever = RagRetriever()
 
+# create simple static response
 class SimpleResponse:
     def __init__(self, content):
         self.content = content
 
+# define query intent
 def define_intent(query: str):
     return classify_intent(query)
 
+# create response based off query
 def create_response(query: str, session_id: str):
     intent = define_intent(query)
     history = get_chat_history(session_id)
@@ -35,6 +40,7 @@ def create_response(query: str, session_id: str):
 
     return response.content
 
+# no interview intent -> rag_response
 def rag_response(query: str, history):
     history_text = "\n".join([f"{m['sender']}: {m['content']}" for m in history])
     context = retriever.search(query=query)
@@ -48,27 +54,27 @@ def rag_response(query: str, history):
 
     return llm.invoke(prompt)
 
-
+# define flow based off intent
 def state_flow(intent, session_id, query, history):
     state = get_state(session_id)
     slots = get_slots(session_id)
 
-    # 1. No active flow yet
+    # no active flow yet
     if not state:
         if intent == "book_interview":
             set_state(session_id, "booking_active")
             save_slots(session_id, slots)  # init empty
-
+            # return static reponse
             return SimpleResponse(
                 "Sure! Let's book your interview. What is your full name?"
             )
 
-    # 2. Booking flow is active → slot filling
+    # booking flow is active → slot filling
     if state == "booking_active":
         updated_slots, response = handle_booking_turn(query, slots)
         save_slots(session_id, updated_slots)
 
-        # If all slots filled, confirm and finish
+        # if all slots filled, confirm and finish
         if all(updated_slots.values()):
             db_gen = get_db()
             db = next(db_gen)
@@ -84,6 +90,7 @@ def state_flow(intent, session_id, query, history):
             clear_state(session_id)
             clear_slots(session_id)
             db_gen.close()
+            # return static reponse
             return SimpleResponse(content=confirmation_msg)
 
         else:
@@ -92,3 +99,4 @@ def state_flow(intent, session_id, query, history):
 
     # fallback
     return rag_response(query, history)
+

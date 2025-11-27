@@ -45,19 +45,19 @@ def create_vector_points(chunks: List[Document],
     return points, vector_ids
 
 # save doc in db
-def save_document_db(db, file_name, chunk_strategy):
+def save_document_db(db, file_name, chunk_strategy, session_id):
     # create table
-    document = Documents(filename = file_name, chunk_strategy = chunk_strategy)
+    document = Documents(filename = file_name, chunk_strategy = chunk_strategy, session_id=session_id)
     db.add(document)
     db.flush() # id is generated
     db.commit()
     return document.id
 
 # ingest document
-def ingest_document_text(text: str, file_name: str, db: Session, strategy: str = "recursive") -> Tuple[List[str], List[Document]]:
+def ingest_document_text(session_id: str, text: str, file_name: str, db: Session, strategy: str = "recursive") -> Tuple[List[str], List[Document]]:
     
     # create session (returns document id)
-    document_id = save_document_db(db=db, file_name=file_name, chunk_strategy=strategy)
+    document_id = save_document_db(db=db, file_name=file_name, chunk_strategy=strategy, session_id=session_id)
     # chunk document
     chunks: List[Document] = chunk_entry(text, strategy=strategy)
 

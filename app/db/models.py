@@ -29,7 +29,7 @@ class Bookings(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False)
+    phone = Column(Integer, nullable=False)
     date_time = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     session_id = Column(String(100), nullable=False)
-

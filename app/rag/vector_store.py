@@ -40,9 +40,5 @@ def reset_qdrant_collection():
         if collection_exists():
             client.delete_collection(collection_name=settings.QDRANT_COLLECTION)
 
-            # DELETE THIS
-            print("Qdrant collection deleted successfully\n")
-            # TILL HERE
-
     except Exception as e:
         print(f"Exception: {e}")

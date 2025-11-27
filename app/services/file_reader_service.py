@@ -1,9 +1,11 @@
+# DEFINES FILE READING CLASS
 import mimetypes
 import pdfplumber
 from fastapi import HTTPException, UploadFile
 from docx import Document
 from io import BytesIO
 
+# class to read pdf, txt, docx, etc files
 class FileReader:
     def __init__(self, file: UploadFile):
         self.file = file
@@ -13,19 +15,20 @@ class FileReader:
         mime = mimetypes.guess_type(self.file_name)[0]
 
         file_bytes = await self.file.read()   # read once here
-
+        # if pdf
         if mime == "application/pdf":
             text = self.extract_pdf(file_bytes)
-
+        # if txt
         elif mime == "text/plain":
             text = self.extract_txt(file_bytes)
 
+        # if docx
         elif mime and mime.endswith("wordprocessingml.document"):
             text = self.extract_docx(file_bytes)
 
         else:
             raise HTTPException(400, "Unsupported file type")
-
+        # strip unnecessary characters
         return self.clean_text(text)
 
     # ------------ Extractors -------------

@@ -1,7 +1,9 @@
+# INTENT CLASSIFIER USING CLASSIFIER LLM
 from app.rag.llm_client import classifier_llm
 import json
 import re
 
+# two intents: normal_chat (rag) or booking_interview
 INTENTS = ["normal_chat", "book_interview"]
 
 INTENT_PROMPT = """
@@ -21,14 +23,15 @@ Do NOT output anything else.
 User message: "{message}"
 """
 
+# classifies intent
 def classify_intent(message: str) -> str:
     prompt = INTENT_PROMPT.format(message=message)
     raw = classifier_llm.invoke(prompt).content.strip()
 
-    # 1. Remove ``` blocks if present
+    # Remove ``` blocks if present
     raw_clean = re.sub(r"```.*?\n|```", "", raw).strip()
 
-    # 2. Parse JSON safely
+    # Parse JSON safely
     try:
         data = json.loads(raw_clean)
         intent = data.get("intent", "normal_chat")
@@ -36,7 +39,7 @@ def classify_intent(message: str) -> str:
         print("JSON PARSE FAILED. RAW:", raw)
         return "normal_chat"
 
-    # 3. Enforce known intents only
+    # Enforce known intents only
     if intent not in INTENTS:
         return "normal_chat"
 

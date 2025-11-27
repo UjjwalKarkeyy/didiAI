@@ -1,10 +1,12 @@
-from app.services.booking_extractors import extract_date, extract_email, extract_name, extract_phone
+# DEFINES OVERALL BOOKING FUNCTIONIN
+from app.services.booking_extractors import extract_date, extract_email, extract_name, extract_phone, extract_time
 from app.rag.llm_client import classifier_llm as llm
 from app.db.models import Bookings
 from datetime import datetime, timezone, time
 from sqlalchemy.orm import Session
 from app.db.schemas import AnyResponse
 
+# invoke llm to ask for empty slots
 def ask_slot(slot_name: str, current_slots: dict) -> AnyResponse:
     """
     Strict, controlled prompt that ONLY asks for the missing slot.
@@ -32,8 +34,9 @@ def ask_slot(slot_name: str, current_slots: dict) -> AnyResponse:
         Now, ask the user for: {slot_name}.
         """)
 
+# fill slots or call ask
 def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyResponse]:
-    # 1. Try to fill slots from this message
+    # Try to fill slots from this message
     if not slots.get("name"):
         name = extract_name(user_message)
         if name:
@@ -48,6 +51,11 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
         date = extract_date(user_message)
         if date:
             slots["date"] = date
+
+    if not slots.get("time"):
+        get_time = extract_time(user_message)
+        if get_time:
+            slots["time"] = get_time
 
     if not slots.get("phone"):
         phone = extract_phone(user_message)
@@ -66,34 +74,55 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
     if not slots.get("date"):
         resp = ask_slot("date", slots)
         return slots, resp
+
+    if not slots.get("time"):
+        resp = ask_slot("time", slots)
+        return slots, resp
     
     if not slots.get("phone"):
         resp = ask_slot("phone", slots)
         return slots, resp
 
-    # 3. All filled → state_flow will finalize
+    # All filled → state_flow will finalize
     return slots, None
 
+# store booking info in DB
 def create_booking_from_slots(db: Session, session_id: str, slots: dict):
     """
     Saves a booking into the database using the collected slot values.
-    slots["date"] is expected to be 'YYYY-MM-DD'.
+    Expects:
+        slots["date"] -> YYYY-MM-DD
+        slots["time"] -> HH:MM (24-hour)
     """
 
+    # --------- VALIDATE DATE ----------
+    if not slots.get("date"):
+        raise ValueError("Missing date slot")
+
     try:
-        date_only = datetime.strptime(slots["date"], "%Y-%m-%d").date()
+        date_obj = datetime.strptime(slots["date"], "%Y-%m-%d").date()
     except Exception:
         raise ValueError(f"Invalid date format: {slots['date']}")
 
-    date_time = datetime.combine(
-        date_only,
-        time(hour=10, minute=0, second=0, tzinfo=timezone.utc),
-    )
+    # --------- VALIDATE TIME ----------
+    if not slots.get("time"):
+        raise ValueError("Missing time slot")
 
+    try:
+        hour, minute = map(int, slots["time"].split(":"))
+        time_obj = time(hour=hour, minute=minute, tzinfo=timezone.utc)
+    except Exception:
+        raise ValueError(f"Invalid time format: {slots['time']}")
+
+    # --------- COMBINE INTO DATETIME ----------
+    final_datetime = datetime.combine(date_obj, time_obj)
+
+    # --------- SAVE IN DB ----------
     booking = Bookings(
         name=slots["name"],
         email=slots["email"],
-        date_time=date_time,
+        phone=slots.get("phone"),       
+        date_time=final_datetime,
         session_id=session_id,
     )
 

@@ -1,3 +1,4 @@
+# DEFINES REDIS CLIENT RUNNING LOCALLY
 import redis
 
 # connect to local redis instance
