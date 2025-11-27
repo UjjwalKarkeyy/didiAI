@@ -36,10 +36,12 @@ app/
 │   ├── __init__.py
 │   ├── models.py
 │   ├── schemas.py
+│   ├── session.py
 │   └── db_session.py
 ├── rag/
 │   ├── __init__.py
 │   ├── retriever.py
+│   ├── llm_client.py
 │   ├── chunking.py
 │   ├── embeddings.py
 │   ├── prompt_builder.py
@@ -49,6 +51,7 @@ app/
 │   ├── booking_service.py
 │   ├── booking_extractors.py
 │   └── ingestion_service.py
+│   └── file_reader_service.py
 ├── intent/
 │   └── intent_classifier.py
 ├── state/
@@ -59,6 +62,7 @@ app/
 │   └── redis_client.py
 ├── __init__.py
 └── main.py
+assets/
 ```
 ---
 
