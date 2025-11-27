@@ -11,6 +11,18 @@ It supports:
 - 🗓 Structured Date/Time Extraction  
 - 🧾 SQLite-backed Booking Storage  
 
+## 🧰 Technologies Used
+
+- **FastAPI** — backend API framework  
+- **LangChain** — RAG pipeline, retriever, prompt management  
+- **Gemini 2.5 Flash** — LLM for chat + classification  
+- **SQLite** — lightweight database  
+- **SQLAlchemy** — ORM for DB operations  
+- **Redis** — session management, chat history, slot memory  
+- **ChromaDB** — vector store for RAG  
+- **Python 3.12**  
+- **Uvicorn** — ASGI server  
+
 ---
 
 # 📁 Project Structure
@@ -18,7 +30,7 @@ It supports:
 app/
 ├── api/
 │   ├── __init__.py
-|   ├── chat.py
+│   ├── chat.py
 │   └── ingestion.py
 ├── db/
 │   ├── __init__.py
