@@ -1,6 +1,6 @@
 # didiAI — AI Assistant with RAG, Memory & Interview Booking
 
-didiAI is an AI-powered assistant built with **FastAPI**, **LangChain**, **Gemini**, **Redis**, **SQLite**, and **Vector Search**.  
+didiAI is an AI-powered assistant built with **FastAPI**, **LangChain**, **Gemini**, **Redis**, **SQLite**, **Qdrant**, and **Vector Search**.  
 It supports:
 
 - 📄 Document Ingestion  
