@@ -14,11 +14,12 @@ It supports:
 ## 🧰 Technologies Used
 
 - **FastAPI** — backend API framework  
-- **LangChain** — RAG pipeline, custom retriever, prompt management  
+- **LangChain** — Custom RAG pipeline, custom retriever, prompt management  
 - **Gemini 2.5 Flash** — LLM for chat + classification  
 - **SQLite** — lightweight database  
 - **SQLAlchemy** — ORM for DB operations  
 - **Redis** — session management, chat history, slot memory, state management  
+- **Qdrant** — vector database for document embeddings & retrieval
 - **Python 3.12**  
 - **Uvicorn** — ASGI server  
 
@@ -28,7 +29,7 @@ It supports:
 ```text
 app/
 ├── api/
-│   ├── `__init__`.py
+│   ├── __init__.py
 │   ├── chat.py
 │   └── ingestion.py
 ├── db/
