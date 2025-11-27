@@ -85,37 +85,34 @@ Below is the full slot-filling sequence:
 
 ---
 
-## 🔹 Step 3 — Asking for Name
-<img src="assets/one_give_name.png" width="600">
-
-## 🔹 Step 4 — Asking for Email
+## 🔹 Step 3 — Asking for Email
 <img src="assets/two_ask_email.png" width="600">
 
-## 🔹 Step 5 — User Provides Email
+## 🔹 Step 4 — User Provides Email
 <img src="assets/three_give_email.png" width="600">
 
 ---
 
-## 🔹 Step 6 — Asking for Date
+## 🔹 Step 5 — Asking for Date
 <img src="assets/four_ask_date.png" width="600">
 
-## 🔹 Step 7 — User Provides Date
+## 🔹 Step 6 — User Provides Date
 <img src="assets/five_give_date.png" width="600">
 
 ---
 
-## 🔹 Step 8 — Asking for Time
+## 🔹 Step 7 — Asking for Time
 <img src="assets/six_ask_time.png" width="600">
 
-## 🔹 Step 9 — User Provides Time
+## 🔹 Step 8 — User Provides Time
 <img src="assets/seven_give_time.png" width="600">
 
 ---
 
-## 🔹 Step 10 — Asking for Phone Number
+## 🔹 Step 9 — Asking for Phone Number
 <img src="assets/eight_ask_phoneNo.png" width="600">
 
-## 🔹 Step 11 — User Provides Phone Number
+## 🔹 Step 10 — User Provides Phone Number
 <img src="assets/nine_give_phoneNo.png" width="600">
 
 ---
