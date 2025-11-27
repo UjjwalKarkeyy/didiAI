@@ -25,10 +25,10 @@ It supports:
 ---
 
 # 📁 Project Structure
-
+```text
 app/
 ├── api/
-│   ├── __init__.py
+│   ├── `__init__`.py
 │   ├── chat.py
 │   └── ingestion.py
 ├── db/
@@ -58,7 +58,7 @@ app/
 │   └── redis_client.py
 ├── __init__.py
 └── main.py
-
+```
 ---
 
 # 📥 **1. Document Ingestion Flow**
