@@ -1,4 +1,4 @@
-from app.services.booking_extractors import extract_date, extract_email, extract_name
+from app.services.booking_extractors import extract_date, extract_email, extract_name, extract_phone
 from app.rag.llm_client import classifier_llm as llm
 from app.db.models import Bookings
 from datetime import datetime, timezone, time
@@ -18,12 +18,13 @@ def ask_slot(slot_name: str, current_slots: dict) -> AnyResponse:
         - name
         - email
         - date
+        - phone number
         
         Current slot values: {current_slots}
         
         Rules:
         - Ask ONLY for the missing field: {slot_name}.
-        - Do NOT ask for any other fields (no phone number, no extra info).
+        - Do NOT ask for any other fields (no extra info).
         - Do NOT mention already-filled fields.
         - Keep the reply short and clear.
         - Do NOT talk about JSON, formats, or internal structures.
@@ -48,6 +49,11 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
         if date:
             slots["date"] = date
 
+    if not slots.get("phone"):
+        phone = extract_phone(user_message)
+        if phone:
+            slots["phone"] = phone
+
     # Ask for missing slots in order
     if not slots.get("name"):
         resp = ask_slot("name", slots)
@@ -59,6 +65,10 @@ def handle_booking_turn(user_message: str, slots: dict) -> tuple[dict, AnyRespon
 
     if not slots.get("date"):
         resp = ask_slot("date", slots)
+        return slots, resp
+    
+    if not slots.get("phone"):
+        resp = ask_slot("phone", slots)
         return slots, resp
 
     # 3. All filled → state_flow will finalize

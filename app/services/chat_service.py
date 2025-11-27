@@ -78,6 +78,7 @@ def state_flow(intent, session_id, query, history):
                 f"**Date:** {updated_slots['date']}\n"
                 f"**Name:** {updated_slots['name']}\n"
                 f"**Email:** {updated_slots['email']}\n\n"
+                f"**Phone:** {updated_slots['phone']}\n\n"
                 "Is there anything else I can help you with?"
             )           
             clear_state(session_id)

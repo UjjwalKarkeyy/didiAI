@@ -62,3 +62,32 @@ def extract_name(text: str) -> str | None:
         return result
     return None
 
+def extract_phone(text: str) -> str | None:
+    """
+    Extract phone number using LLM + regex cleanup.
+    Supports formats like:
+    - 9841234567
+    - +977-9812345678
+    - (977) 9812345678
+    - 981-234-5678
+    """
+
+    prompt = f"""
+    Extract ONLY the phone number from this message.
+    Return digits only, no spaces, no hyphens, no additional text.
+    If no phone number is present, return "NONE".
+
+    Message: "{text}"
+    """
+
+    result = llm.invoke(prompt).content.strip()
+
+    # cleanup
+    digits = re.sub(r"\D", "", result)
+
+    if len(digits) >= 7 and len(digits) <= 15:
+        return digits
+
+    return None
+
+

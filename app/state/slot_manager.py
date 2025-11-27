@@ -4,7 +4,7 @@ from app.memory.redis_client import r
 def get_slots(session_id: str) -> dict:
     raw = r.get(f"chat:session:{session_id}:slots")
     if not raw:
-        return {"name": None, "email": None, "date": None}
+        return {"name": None, "email": None, "date": None, "phone": None}
     return json.loads(raw)
 
 def save_slots(session_id: str, slots: dict):
